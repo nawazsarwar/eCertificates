@@ -75,6 +75,14 @@
                             {{ $certificate->available_till }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.certificate.fields.user') }}
+                        </th>
+                        <td>
+                            {{ $certificate->user->name ?? '' }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

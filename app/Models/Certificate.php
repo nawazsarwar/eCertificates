@@ -44,6 +44,7 @@ class Certificate extends Model implements HasMedia
         'status',
         'published_at',
         'available_till',
+        'user_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -78,6 +79,11 @@ class Certificate extends Model implements HasMedia
     public function setAvailableTillAttribute($value)
     {
         $this->attributes['available_till'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

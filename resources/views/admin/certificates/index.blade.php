@@ -44,6 +44,9 @@
                             {{ trans('cruds.certificate.fields.available_till') }}
                         </th>
                         <th>
+                            {{ trans('cruds.certificate.fields.user') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -78,6 +81,9 @@
                             </td>
                             <td>
                                 {{ $certificate->available_till ?? '' }}
+                            </td>
+                            <td>
+                                {{ $certificate->user->name ?? '' }}
                             </td>
                             <td>
                                 @can('certificate_show')

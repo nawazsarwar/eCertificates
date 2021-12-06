@@ -37,6 +37,10 @@ class StoreCertificateRequest extends FormRequest
                 'date_format:' . config('panel.date_format') . ' ' . config('panel.time_format'),
                 'nullable',
             ],
+            'user_id' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 }
