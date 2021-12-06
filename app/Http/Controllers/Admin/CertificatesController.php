@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroyCertificateRequest;
 use App\Http\Requests\StoreCertificateRequest;
 use App\Http\Requests\UpdateCertificateRequest;
 use App\Models\Certificate;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -21,7 +22,7 @@ class CertificatesController extends Controller
     {
         abort_if(Gate::denies('certificate_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $certificates = Certificate::with(['media'])->get();
+        $certificates = Certificate::with(['user', 'media'])->get();
 
         return view('admin.certificates.index', compact('certificates'));
     }
@@ -30,7 +31,9 @@ class CertificatesController extends Controller
     {
         abort_if(Gate::denies('certificate_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.certificates.create');
+        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.certificates.create', compact('users'));
     }
 
     public function store(StoreCertificateRequest $request)
@@ -52,7 +55,11 @@ class CertificatesController extends Controller
     {
         abort_if(Gate::denies('certificate_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.certificates.edit', compact('certificate'));
+        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $certificate->load('user');
+
+        return view('admin.certificates.edit', compact('certificate', 'users'));
     }
 
     public function update(UpdateCertificateRequest $request, Certificate $certificate)
@@ -76,6 +83,8 @@ class CertificatesController extends Controller
     public function show(Certificate $certificate)
     {
         abort_if(Gate::denies('certificate_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $certificate->load('user');
 
         return view('admin.certificates.show', compact('certificate'));
     }
